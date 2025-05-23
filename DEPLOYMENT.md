@@ -133,9 +133,45 @@ If you want to serve your Next.js application behind Nginx, you can set up a rev
    sudo systemctl restart nginx
    ```
 
-## SSL Configuration (Optional)
+## SSL Configuration
 
-To secure your site with SSL using Let's Encrypt:
+### Option 1: Using Cloudflare (Recommended - Free)
+
+1. Create a Cloudflare account at [cloudflare.com](https://cloudflare.com) if you don't have one.
+
+2. Add your domain (patropatri.online) to Cloudflare:
+   - Go to the Cloudflare dashboard
+   - Click "Add a Site"
+   - Enter your domain name and follow the setup instructions
+   - Cloudflare will scan for existing DNS records
+
+3. Update your domain's nameservers to point to Cloudflare:
+   - Cloudflare will provide you with nameservers (like ns1.cloudflare.com)
+   - Update these at your domain registrar (where you purchased patropatri.online)
+   - This change may take 24-48 hours to propagate
+
+4. Enable SSL in Cloudflare:
+   - Go to the "SSL/TLS" section in your Cloudflare dashboard
+   - Set SSL mode to "Full" or "Full (strict)" 
+   - Under "Edge Certificates", ensure "Always Use HTTPS" is enabled
+
+5. Configure your Nginx server to accept Cloudflare connections:
+   ```
+   server {
+       listen 80;
+       server_name patropatri.online www.patropatri.online;
+       
+       location / {
+           proxy_pass http://localhost:3000;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+       }
+   }
+   ```
+
+### Option 2: Using Let's Encrypt (Free)
 
 1. Install Certbot:
    ```
