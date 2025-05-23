@@ -37,7 +37,7 @@ jobs:
               HostName ${{ secrets.SSH_HOST }}
               User ${{ secrets.SSH_USER }}
               IdentityFile ~/.ssh/id_rsa
-              StrictHostKeyChecking yes
+              StrictHostKeyChecking accept-new
       
       - name: Deploy to Contabo server
         run: |
