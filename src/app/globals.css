@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --burgundy: #8B2332;
+  --burgundy-light: #A54A57;
+  --burgundy-dark: #6A1A26;
+  --gold: #CEA55D;
+  --gold-light: #DEBF85;
+  --gold-dark: #B38D45;
+  --teal: #1D7A74;
+  --teal-light: #3A9E97;
+  --teal-dark: #155953;
+  --dark-slate: #2D3E4F;
+  --green: #2A7D4F;
+  --app-background: #FDF6E3;
+  --background-dark: #ECE6D5;
+  --surface: #FFFFFF;
+  --surface-accent: #F9F5ED;
+  --error: #B00020;
+}
+
+html, body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--app-background);
+  color: var(--dark-slate);
+  scroll-behavior: smooth;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-burgundy text-white font-medium py-3 px-6 rounded-lg hover:bg-burgundy-dark transition-colors duration-300 shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply bg-gold text-darkSlate font-medium py-3 px-6 rounded-lg hover:bg-gold-dark transition-colors duration-300 shadow-md;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-burgundy text-burgundy font-medium py-3 px-6 rounded-lg hover:bg-burgundy hover:text-white transition-colors duration-300;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-burgundy mb-8 text-center;
+  }
+  
+  .card {
+    @apply bg-surface rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl;
+  }
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}

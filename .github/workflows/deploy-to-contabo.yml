@@ -1,0 +1,64 @@
+name: Deploy to Contabo Server
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch name if different
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+      
+      - name: Deploy to Contabo server
+        run: |
+          # Create a tarball of the build output
+          tar -czf build.tar.gz .next public package.json package-lock.json next.config.js
+          
+          # Copy the tarball to the server
+          scp build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/patro-patri-landing/
+          
+          # SSH into the server and deploy the application
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ~/patro-patri-landing
+            
+            # Backup the current deployment
+            if [ -d ".next" ]; then
+              mkdir -p backups
+              timestamp=$(date +%Y%m%d%H%M%S)
+              tar -czf backups/backup-$timestamp.tar.gz .next public package.json package-lock.json next.config.js
+            fi
+            
+            # Extract the new build
+            tar -xzf build.tar.gz
+            
+            # Install production dependencies
+            npm ci --production
+            
+            # Restart the application (assuming PM2 is used)
+            pm2 restart patro-patri-landing || pm2 start npm --name "patro-patri-landing" -- start
+            
+            # Clean up
+            rm build.tar.gz
+          EOF
