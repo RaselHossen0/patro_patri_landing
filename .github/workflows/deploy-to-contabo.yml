@@ -30,14 +30,26 @@ jobs:
         with:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+          name: id_rsa # Explicitly name the private key file
+          if_key_exists: replace # Replace if exists
+          config: | # Add SSH config for connection persistence
+            Host ${{ secrets.SSH_HOST }}
+              HostName ${{ secrets.SSH_HOST }}
+              User ${{ secrets.SSH_USER }}
+              IdentityFile ~/.ssh/id_rsa
+              StrictHostKeyChecking yes
       
       - name: Deploy to Contabo server
         run: |
+          # Debug SSH connection
+          echo "Attempting to connect to ${{ secrets.SSH_HOST }} as ${{ secrets.SSH_USER }}"
+          ssh -v ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful"'
+          
           # Create a tarball of the build output
           tar -czf build.tar.gz .next public package.json package-lock.json next.config.js
           
           # Copy the tarball to the server
-          scp build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/patro-patri-landing/
+          scp -v build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/patro-patri-landing/
           
           # SSH into the server and deploy the application
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
