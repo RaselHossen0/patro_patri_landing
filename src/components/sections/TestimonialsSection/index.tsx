@@ -2,13 +2,16 @@
 
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 interface TestimonialsSectionProps {
   isVisible?: boolean;
+  title?: string;
+  subtitle?: string;
+  testimonials?: any[];
+  stats?: any[];
 }
 
-const TestimonialsSection = ({ isVisible = false }: TestimonialsSectionProps) => {
+const TestimonialsSection = ({ isVisible = false, title, subtitle, testimonials: customTestimonials, stats: customStats }: TestimonialsSectionProps) => {
   const testimonialsRef = useRef<HTMLElement>(null);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   
@@ -101,7 +104,7 @@ const TestimonialsSection = ({ isVisible = false }: TestimonialsSectionProps) =>
                       ))}
                     </div>
                     
-                    <blockquote className="text-xl italic text-gray-700 mb-6">"{testimonial.quote}"</blockquote>
+                    <blockquote className="text-xl italic text-gray-700 mb-6">&quot;{testimonial.quote}&quot;</blockquote>
                     
                     <div>
                       <div className="font-semibold text-darkSlate">{testimonial.name}</div>

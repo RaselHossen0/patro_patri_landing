@@ -2,6 +2,7 @@
 import Layout from '@/components/layout/Layout';
 import PageHeader from '@/components/ui/PageHeader';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface TeamMemberProps {
   name: string;
@@ -26,9 +27,11 @@ const TeamMember = ({ name, role, image, bio, socialLinks, delay }: TeamMemberPr
       className="bg-surface rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row"
     >
       <div className="md:w-1/3 h-64 md:h-auto overflow-hidden">
-        <img 
+        <Image 
           src={image} 
           alt={name} 
+          width={400}
+          height={600}
           className="w-full h-full object-cover transition-all duration-300 hover:scale-110"
         />
       </div>
@@ -219,7 +222,7 @@ export default function TeamPage() {
                 <div className="md:w-3/4 text-center md:text-left md:pl-6">
                   <h3 className="text-2xl font-bold text-burgundy mb-4">Join Our Team</h3>
                   <p className="text-darkSlate mb-6">
-                    We're always looking for talented individuals who are passionate about our mission to join our team. If you're interested in helping Bangladeshi singles find their perfect match, we'd love to hear from you.
+                    We&apos;re always looking for talented individuals who are passionate about our mission to join our team. If you&apos;re interested in helping Bangladeshi singles find their perfect match, we&apos;d love to hear from you.
                   </p>
                   <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
                     <a 

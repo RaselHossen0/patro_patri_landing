@@ -2,13 +2,16 @@
 
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 interface FeaturesSectionProps {
   isVisible?: boolean;
+  title?: string;
+  subtitle?: string;
+  features?: any[];
+  showPremiumBadge?: boolean;
 }
 
-const FeaturesSection = ({ isVisible = false }: FeaturesSectionProps) => {
+const FeaturesSection = ({ isVisible = false, title, subtitle, features: customFeatures, showPremiumBadge }: FeaturesSectionProps) => {
   const featuresRef = useRef<HTMLElement>(null);
   
   const features = [

@@ -1,7 +1,7 @@
 "use client";
 import Layout from '@/components/layout/Layout';
 import PageHeader from '@/components/ui/PageHeader';
-import Card from '@/components/ui/Card';
+// Card import removed as it was unused
 import FeatureSection from '@/components/sections/FeaturesSection/index';
 import TestimonialsSection from '@/components/sections/TestimonialsSection';
 import { motion } from 'framer-motion';
@@ -121,10 +121,10 @@ export default function AboutPage() {
             >
               <h2 className="text-3xl md:text-4xl font-bold text-burgundy mb-6">Our Mission</h2>
               <p className="text-darkSlate mb-6">
-                At Patro Patri, our mission is to create meaningful connections between Bangladeshi singles who share similar values, traditions, and life goals. We understand the importance of cultural compatibility in relationships, and we've built our platform to honor these traditions while embracing modern technology.
+                At Patro Patri, our mission is to create meaningful connections between Bangladeshi singles who share similar values, traditions, and life goals. We understand the importance of cultural compatibility in relationships, and we&apos;ve built our platform to honor these traditions while embracing modern technology.
               </p>
               <p className="text-darkSlate mb-6">
-                We believe that finding a life partner should be a safe, respectful, and enjoyable experience. That's why we've created a platform that prioritizes authenticity, privacy, and compatibility, helping our users find matches that truly align with their values and preferences.
+                We believe that finding a life partner should be a safe, respectful, and enjoyable experience. That&apos;s why we&apos;ve created a platform that prioritizes authenticity, privacy, and compatibility, helping our users find matches that truly align with their values and preferences.
               </p>
               <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-4">

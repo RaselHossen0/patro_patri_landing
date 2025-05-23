@@ -2,7 +2,6 @@
 
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 
 interface HowItWorksSectionProps {
   isVisible?: boolean;
@@ -33,7 +32,7 @@ const HowItWorksSection = ({ isVisible = false }: HowItWorksSectionProps) => {
     {
       number: "04",
       title: "Meet in Person",
-      description: "When you're ready, arrange to meet in person or attend one of our exclusive matrimonial events.",
+      description: "When you&apos;re ready, arrange to meet in person or attend one of our exclusive matrimonial events.",
       image: "/images/meet-in-person.png"
     }
   ];
@@ -58,7 +57,7 @@ const HowItWorksSection = ({ isVisible = false }: HowItWorksSectionProps) => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-lg text-gray-600 max-w-2xl mx-auto"
           >
-            Finding your perfect match is a journey. Here's how our platform makes it simple and meaningful.
+            Finding your perfect match is a journey. Here&apos;s how our platform makes it simple and meaningful.
           </motion.p>
         </div>
         
@@ -137,7 +136,7 @@ const HowItWorksSection = ({ isVisible = false }: HowItWorksSectionProps) => {
                       </div>
                       <div className="flex justify-end">
                         <div className="text-sm text-gray-700 bg-burgundy/10 p-3 rounded-lg inline-block">
-                          Hi Samira! I'd love to chat and get to know you better.
+                          Hi Samira! I&apos;d love to chat and get to know you better.
                         </div>
                       </div>
                     </div>
