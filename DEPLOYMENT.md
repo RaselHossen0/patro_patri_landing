@@ -13,7 +13,7 @@ This document provides instructions on how to set up the GitHub Actions workflow
 
 1. Connect to your Contabo server via SSH:
    ```
-   ssh username@your-server-ip
+   ssh root@178.18.251.219
    ```
 
 2. Create a directory for the application:
@@ -54,7 +54,7 @@ You need to add the following secrets to your GitHub repository:
 This is your private SSH key. If you don't have an SSH key pair, you can generate one:
 
 ```
-ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+ssh-keygen -t rsa -b 4096 -C "hrasel2002@gmail.com"
 ```
 
 Then copy the contents of the private key file (usually `~/.ssh/id_rsa`):
@@ -70,7 +70,7 @@ Add this as the `SSH_PRIVATE_KEY` secret in your GitHub repository.
 To get the known hosts entry for your server:
 
 ```
-ssh-keyscan -H your-server-ip
+ssh-keyscan -H 178.18.251.219
 ```
 
 Add the output as the `SSH_KNOWN_HOSTS` secret.
@@ -105,7 +105,7 @@ If you want to serve your Next.js application behind Nginx, you can set up a rev
    ```
    server {
        listen 80;
-       server_name your-domain.com www.your-domain.com;
+       server_name patropatri.online www.patropatri.online;
 
        location / {
            proxy_pass http://localhost:3000;
@@ -144,7 +144,7 @@ To secure your site with SSL using Let's Encrypt:
 
 2. Obtain an SSL certificate:
    ```
-   sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+   sudo certbot --nginx -d patropatri.online -d www.patropatri.online
    ```
 
 3. Follow the prompts to complete the setup.
