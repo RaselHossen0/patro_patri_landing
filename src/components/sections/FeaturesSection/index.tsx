@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { apiService, UserCountResponse } from '@/services/api';
 
 interface FeaturesSectionProps {
   isVisible?: boolean;
@@ -13,6 +14,30 @@ interface FeaturesSectionProps {
 
 const FeaturesSection = ({ isVisible = false, title, subtitle, features: customFeatures, showPremiumBadge }: FeaturesSectionProps) => {
   const featuresRef = useRef<HTMLElement>(null);
+  const [userCount, setUserCount] = useState<UserCountResponse['data']>({
+    totalUsers: 1000,
+    message: 'Join 1,000+ registered users'
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Fetch user count on component mount
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      try {
+        setIsLoading(true);
+        const response = await apiService.getRegisteredUsersCount();
+        if (response.success) {
+          setUserCount(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user count:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserCount();
+  }, []);
   
   const features = [
     {
@@ -89,10 +114,24 @@ const FeaturesSection = ({ isVisible = false, title, subtitle, features: customF
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
+            className="text-lg text-gray-600 max-w-2xl mx-auto mb-8"
           >
             Our app is designed with Bangladeshi cultural values in mind, offering features that make finding your life partner easier and more meaningful.
           </motion.p>
+          
+          {/* User Count Display */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-flex items-center bg-gradient-to-r from-burgundy to-gold text-white rounded-full px-8 py-4 shadow-lg"
+          >
+            <div className="w-4 h-4 bg-white rounded-full mr-3 animate-pulse"></div>
+            <span className="font-bold text-lg">
+              {isLoading ? 'Loading...' : userCount.message}
+            </span>
+          </motion.div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

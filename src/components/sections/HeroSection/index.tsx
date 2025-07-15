@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { apiService, UserCountResponse } from '@/services/api';
 
 interface CountdownProps {
   days: number;
@@ -13,6 +14,11 @@ interface CountdownProps {
 
 const HeroSection = () => {
   const [countdown, setCountdown] = useState<CountdownProps>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [userCount, setUserCount] = useState<UserCountResponse['data']>({
+    totalUsers: 1000,
+    message: 'Join 1,000+ registered users'
+  });
+  const [isLoading, setIsLoading] = useState(true);
   
   // Set launch date to 30 days from now
   useEffect(() => {
@@ -38,6 +44,25 @@ const HeroSection = () => {
     return () => clearInterval(timer);
   }, []);
 
+  // Fetch user count on component mount
+  useEffect(() => {
+    const fetchUserCount = async () => {
+      try {
+        setIsLoading(true);
+        const response = await apiService.getRegisteredUsersCount();
+        if (response.success) {
+          setUserCount(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user count:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserCount();
+  }, []);
+
   return (
     <section className="relative min-h-screen bg-gradient-to-b from-darkSlate to-darkSlate/95 text-white py-20 md:py-0 flex items-center">
       {/* Background Pattern */}
@@ -59,6 +84,21 @@ const HeroSection = () => {
             <p className="text-lg md:text-xl text-gray-300 mb-8">
               The premier matrimony app designed specifically for Bangladeshi singles looking for meaningful relationships that respect cultural values.
             </p>
+            
+            {/* User Count Display */}
+            <div className="mb-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="inline-flex items-center bg-gold/10 border border-gold/20 rounded-full px-6 py-3"
+              >
+                <div className="w-3 h-3 bg-gold rounded-full mr-3 animate-pulse"></div>
+                <span className="text-gold font-semibold">
+                  {isLoading ? 'Loading...' : userCount.message}
+                </span>
+              </motion.div>
+            </div>
             
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
               <button className="bg-burgundy text-white font-medium py-3 px-8 rounded-lg hover:bg-burgundy-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
