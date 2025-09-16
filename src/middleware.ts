@@ -2,6 +2,28 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  // Block Server Actions completely
+  const contentType = request.headers.get('content-type');
+  const actionId = request.headers.get('next-action-id');
+  
+  if (actionId || contentType?.includes('text/plain')) {
+    console.log('Blocking Server Action request:', {
+      url: request.url,
+      method: request.method,
+      contentType,
+      actionId,
+      origin: request.headers.get('origin'),
+      forwardedHost: request.headers.get('x-forwarded-host')
+    });
+    
+    return new NextResponse('Server Actions are disabled', { 
+      status: 400,
+      headers: {
+        'Content-Type': 'text/plain',
+      }
+    });
+  }
+
   // Handle SSLCommerz redirects
   if (request.nextUrl.pathname.startsWith('/payment/')) {
     const origin = request.headers.get('origin');
