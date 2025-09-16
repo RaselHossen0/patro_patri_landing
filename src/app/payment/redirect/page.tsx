@@ -7,19 +7,22 @@ function PaymentRedirectContent() {
   const searchParams = useSearchParams();
   
   useEffect(() => {
-    // Extract SSLCommerz parameters
+    // Extract SSLCommerz parameters from URL
     const tran_id = searchParams.get('tran_id');
     const status = searchParams.get('status');
     const val_id = searchParams.get('val_id');
     
     console.log('SSLCommerz redirect parameters:', { tran_id, status, val_id });
     
-    // Redirect to appropriate page based on status
-    if (status === 'VALID') {
-      window.location.href = `/payment/success?tran_id=${tran_id}&status=${status}&val_id=${val_id}`;
-    } else {
-      window.location.href = `/payment/fail?tran_id=${tran_id}&status=${status}`;
-    }
+    // Small delay to ensure page is fully loaded
+    setTimeout(() => {
+      // Redirect to appropriate page based on status
+      if (status === 'VALID') {
+        window.location.href = `/payment/success?tran_id=${tran_id}&status=${status}&val_id=${val_id}`;
+      } else {
+        window.location.href = `/payment/fail?tran_id=${tran_id}&status=${status}`;
+      }
+    }, 100);
   }, [searchParams]);
   
   return (
