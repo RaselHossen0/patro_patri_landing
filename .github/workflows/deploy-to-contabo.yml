@@ -87,23 +87,11 @@ jobs:
           
           # Extract new deployment
           tar -xzf landing.tar.gz
-          mv .next current
-          mv src current/src
-          mv public current/public
-          mv package.json current/
-          mv package-lock.json current/
-          mv next.config.js current/
-          mv next.config.ts current/
-          mv tailwind.config.ts current/
-          mv postcss.config.mjs current/
-          mv tsconfig.json current/
           
           # Install production dependencies
-          cd current
           npm ci --production
           
           # Clean up
-          cd ..
           rm landing.tar.gz
           
           echo "Landing page deployment completed successfully"
@@ -117,7 +105,7 @@ jobs:
           pm2 delete patro-patri-landing || true
           
           # Start new process
-          cd ~/patro-patri-landing/current
+          cd ~/patro-patri-landing
           pm2 start npm --name "patro-patri-landing" -- start
           
           # Save PM2 configuration
