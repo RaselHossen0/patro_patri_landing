@@ -30,6 +30,9 @@ jobs:
     - name: Create deployment archive
       run: |
         tar -czf landing.tar.gz \
+          --exclude=node_modules \
+          --exclude=.git \
+          --exclude=.next/cache \
           .next \
           src \
           public \
@@ -39,10 +42,7 @@ jobs:
           next.config.ts \
           tailwind.config.ts \
           postcss.config.mjs \
-          tsconfig.json \
-          --exclude=node_modules \
-          --exclude=.git \
-          --exclude=.next/cache
+          tsconfig.json
           
     - name: Setup SSH
       uses: shimataro/ssh-key-action@v2
