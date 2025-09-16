@@ -39,6 +39,7 @@ jobs:
         cd landing
         tar -czf ../landing.tar.gz \
           .next \
+          src \
           public \
           package.json \
           package-lock.json \
@@ -87,6 +88,7 @@ jobs:
           # Extract new deployment
           tar -xzf landing.tar.gz
           mv .next current
+          mv src current/src
           mv public current/public
           mv package.json current/
           mv package-lock.json current/
