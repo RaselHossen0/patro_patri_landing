@@ -4,15 +4,18 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['images.unsplash.com'],
   },
-  // Allow SSLCommerz redirects
+  // Disable server actions validation for SSLCommerz redirects
   experimental: {
     serverActions: {
       allowedOrigins: [
         'patropatri.online',
         'sandbox.sslcommerz.com',
         'securepay.sslcommerz.com',
-        'localhost:3000'
+        'localhost:3000',
+        '*.sslcommerz.com',
+        '*.patropatri.online'
       ],
+      bodySizeLimit: '2mb',
     },
   },
   // Handle SSLCommerz redirects properly
@@ -31,12 +34,23 @@ const nextConfig: NextConfig = {
           },
           {
             key: 'Access-Control-Allow-Headers',
-            value: 'Content-Type, Authorization, x-forwarded-host',
+            value: 'Content-Type, Authorization, x-forwarded-host, origin',
+          },
+        ],
+      },
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
           },
         ],
       },
     ];
   },
+  // Disable strict mode for SSLCommerz compatibility
+  reactStrictMode: false,
 };
 
 export default nextConfig;

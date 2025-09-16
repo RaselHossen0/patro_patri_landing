@@ -15,12 +15,24 @@ export function middleware(request: NextRequest) {
       'localhost:3000'
     ];
     
+    // Always allow SSLCommerz redirects
     if (origin && allowedOrigins.some(allowed => origin.includes(allowed))) {
       // Add CORS headers for SSLCommerz redirects
       const response = NextResponse.next();
       response.headers.set('Access-Control-Allow-Origin', origin);
       response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-forwarded-host');
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-forwarded-host, origin');
+      response.headers.set('Access-Control-Allow-Credentials', 'true');
+      return response;
+    }
+    
+    // For SSLCommerz redirects, always allow regardless of origin
+    if (origin && origin.includes('sslcommerz.com')) {
+      const response = NextResponse.next();
+      response.headers.set('Access-Control-Allow-Origin', origin);
+      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-forwarded-host, origin');
+      response.headers.set('Access-Control-Allow-Credentials', 'true');
       return response;
     }
   }
@@ -31,5 +43,6 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/payment/:path*',
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
 };
