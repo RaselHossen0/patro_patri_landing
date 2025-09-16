@@ -1,76 +1,146 @@
-name: Deploy to Contabo Server
+name: Deploy Landing Page to Contabo Server
 
 on:
   push:
-    branches:
-      - main  # Change this to your main branch name if different
+    branches: [ main, master ]
+    paths:
+      - 'landing/**'
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
       
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-          cache: 'npm'
-      
-      - name: Install dependencies
-        run: npm ci
-      
-      - name: Build application
-        run: npm run build
-      
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-          name: id_rsa # Explicitly name the private key file
-          if_key_exists: replace # Replace if exists
-          config: | # Add SSH config for connection persistence
-            Host ${{ secrets.SSH_HOST }}
-              HostName ${{ secrets.SSH_HOST }}
-              User ${{ secrets.SSH_USER }}
-              IdentityFile ~/.ssh/id_rsa
-              StrictHostKeyChecking accept-new
-      
-      - name: Deploy to Contabo server
-        run: |
-          # Debug SSH connection
-          echo "Attempting to connect to ${{ secrets.SSH_HOST }} as ${{ secrets.SSH_USER }}"
-          ssh -v ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'echo "SSH connection successful"'
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: 'landing/package-lock.json'
+        
+    - name: Install dependencies
+      run: |
+        cd landing
+        npm ci
+        
+    - name: Build Next.js application
+      run: |
+        cd landing
+        npm run build
+      env:
+        NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+        
+    - name: Create deployment archive
+      run: |
+        cd landing
+        tar -czf ../landing.tar.gz \
+          .next \
+          public \
+          package.json \
+          package-lock.json \
+          next.config.js \
+          next.config.ts \
+          tailwind.config.ts \
+          postcss.config.mjs \
+          tsconfig.json \
+          --exclude=node_modules \
+          --exclude=.git \
+          --exclude=.next/cache
           
-          # Create a tarball of the build output
-          tar -czf build.tar.gz .next public package.json package-lock.json next.config.js
+    - name: Setup SSH
+      uses: shimataro/ssh-key-action@v2
+      with:
+        name: id_rsa
+        if_key_exists: replace
+        config: |
+          Host *
+            HostName ${{ secrets.SSH_HOST }}
+            User ${{ secrets.SSH_USER }}
+            IdentityFile ~/.ssh/id_rsa
+            StrictHostKeyChecking accept-new
+            
+    - name: Add server to known hosts
+      run: |
+        echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+        
+    - name: Deploy to server
+      run: |
+        # Create deployment directory if it doesn't exist
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} 'mkdir -p ~/patro-patri-landing'
+        
+        # Upload the built application
+        scp landing.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/patro-patri-landing/
+        
+        # Extract and setup on server
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+          cd ~/patro-patri-landing
           
-          # Copy the tarball to the server
-          scp -v build.tar.gz ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:~/patro-patri-landing/
+          # Backup current deployment
+          if [ -d "current" ]; then
+            mv current backup-$(date +%Y%m%d-%H%M%S)
+          fi
           
-          # SSH into the server and deploy the application
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd ~/patro-patri-landing
-            
-            # Backup the current deployment
-            if [ -d ".next" ]; then
-              mkdir -p backups
-              timestamp=$(date +%Y%m%d%H%M%S)
-              tar -czf backups/backup-$timestamp.tar.gz .next public package.json package-lock.json next.config.js
-            fi
-            
-            # Extract the new build
-            tar -xzf build.tar.gz
-            
-            # Install production dependencies
-            npm ci --production
-            
-            # Restart the application (assuming PM2 is used)
-            pm2 restart patro-patri-landing || pm2 start npm --name "patro-patri-landing" -- start
-            
-            # Clean up
-            rm build.tar.gz
-          EOF
+          # Extract new deployment
+          tar -xzf landing.tar.gz
+          mv .next current
+          mv public current/public
+          mv package.json current/
+          mv package-lock.json current/
+          mv next.config.js current/
+          mv next.config.ts current/
+          mv tailwind.config.ts current/
+          mv postcss.config.mjs current/
+          mv tsconfig.json current/
+          
+          # Install production dependencies
+          cd current
+          npm ci --production
+          
+          # Clean up
+          cd ..
+          rm landing.tar.gz
+          
+          echo "Landing page deployment completed successfully"
+        '
+        
+    - name: Restart PM2 process
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
+          # Stop existing landing page process
+          pm2 stop patro-patri-landing || true
+          pm2 delete patro-patri-landing || true
+          
+          # Start new process
+          cd ~/patro-patri-landing/current
+          pm2 start npm --name "patro-patri-landing" -- start
+          
+          # Save PM2 configuration
+          pm2 save
+          
+          # Show status
+          pm2 status
+        '
+        
+    - name: Verify deployment
+      run: |
+        echo "Waiting for deployment to be ready..."
+        sleep 10
+        
+        # Test if the landing page is accessible
+        if curl -f -s https://patropatri.online > /dev/null; then
+          echo "✅ Landing page is accessible"
+        else
+          echo "❌ Landing page is not accessible"
+          exit 1
+        fi
+        
+        # Test API integration
+        if curl -f -s https://patropatri.online/api/users/count > /dev/null; then
+          echo "✅ API integration is working"
+        else
+          echo "⚠️ API integration may need attention"
+        fi
