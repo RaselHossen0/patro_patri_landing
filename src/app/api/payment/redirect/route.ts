@@ -8,8 +8,12 @@ export async function GET(request: NextRequest) {
   const status = searchParams.get('status');
   const val_id = searchParams.get('val_id');
   
-  // Get the proper base URL
-  const baseUrl = request.headers.get('host') ? `https://${request.headers.get('host')}` : 'https://patropatri.online';
+  console.log('SSLCommerz GET redirect:', { tran_id, status, val_id });
+  
+  // Get the proper base URL - use the original host from headers
+  const forwardedHost = request.headers.get('x-forwarded-host');
+  const host = request.headers.get('host');
+  const baseUrl = forwardedHost ? `https://${forwardedHost}` : (host ? `https://${host}` : 'https://patropatri.online');
   
   // Redirect to appropriate page based on status
   if (status === 'VALID') {
@@ -24,24 +28,54 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const formData = await request.formData();
-  
-  // Extract SSLCommerz parameters from form data
-  const tran_id = formData.get('tran_id') as string;
-  const status = formData.get('status') as string;
-  const val_id = formData.get('val_id') as string;
-  
-  // Get the proper base URL
-  const baseUrl = request.headers.get('host') ? `https://${request.headers.get('host')}` : 'https://patropatri.online';
-  
-  // Redirect to appropriate page based on status
-  if (status === 'VALID') {
-    return NextResponse.redirect(
-      new URL(`/payment/success?tran_id=${tran_id}&status=${status}&val_id=${val_id}`, baseUrl)
-    );
-  } else {
-    return NextResponse.redirect(
-      new URL(`/payment/fail?tran_id=${tran_id}&status=${status}`, baseUrl)
-    );
+  try {
+    // Check if this is a Server Action request
+    const contentType = request.headers.get('content-type');
+    const actionId = request.headers.get('next-action-id');
+    
+    console.log('SSLCommerz POST redirect:', { 
+      contentType, 
+      actionId,
+      headers: Object.fromEntries(request.headers.entries())
+    });
+    
+    // If it's a Server Action, return an error to prevent processing
+    if (actionId || contentType?.includes('text/plain')) {
+      console.log('Blocking Server Action request from SSLCommerz');
+      return new NextResponse('Server Actions not allowed for SSLCommerz redirects', { 
+        status: 400,
+        headers: {
+          'Content-Type': 'text/plain',
+        }
+      });
+    }
+    
+    const formData = await request.formData();
+    
+    // Extract SSLCommerz parameters from form data
+    const tran_id = formData.get('tran_id') as string;
+    const status = formData.get('status') as string;
+    const val_id = formData.get('val_id') as string;
+    
+    console.log('SSLCommerz POST form data:', { tran_id, status, val_id });
+    
+    // Get the proper base URL - use the original host from headers
+    const forwardedHost = request.headers.get('x-forwarded-host');
+    const host = request.headers.get('host');
+    const baseUrl = forwardedHost ? `https://${forwardedHost}` : (host ? `https://${host}` : 'https://patropatri.online');
+    
+    // Redirect to appropriate page based on status
+    if (status === 'VALID') {
+      return NextResponse.redirect(
+        new URL(`/payment/success?tran_id=${tran_id}&status=${status}&val_id=${val_id}`, baseUrl)
+      );
+    } else {
+      return NextResponse.redirect(
+        new URL(`/payment/fail?tran_id=${tran_id}&status=${status}`, baseUrl)
+      );
+    }
+  } catch (error) {
+    console.error('Error in SSLCommerz POST redirect:', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
