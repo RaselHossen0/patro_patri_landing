@@ -16,8 +16,6 @@ const nextConfig: NextConfig = {
         '*.patropatri.online'
       ],
       bodySizeLimit: '2mb',
-      // Disable Server Actions validation for payment redirects
-      allowedPaths: ['/api/payment/redirect'],
     },
   },
   // Handle SSLCommerz redirects properly
