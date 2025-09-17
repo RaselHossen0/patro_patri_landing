@@ -17,8 +17,6 @@ const nextConfig: NextConfig = {
       ],
       bodySizeLimit: '2mb',
     },
-    // Disable Server Actions completely for this app
-    serverActionsBodySizeLimit: '0',
   },
   // Handle SSLCommerz redirects properly
   async headers() {
