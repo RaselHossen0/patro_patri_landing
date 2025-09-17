@@ -19,6 +19,13 @@ const nextConfig: NextConfig = {
     },
   },
   // Handle SSLCommerz redirects properly
+  async rewrites() {
+    return [
+      // Ensure POSTs to the static HTML go to the API handler instead
+      { source: '/payment-redirect.html', destination: '/api/payment/redirect' },
+    ];
+  },
+  
   async headers() {
     return [
       {
