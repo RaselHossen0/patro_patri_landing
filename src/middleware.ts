@@ -2,6 +2,17 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
+  // Seamlessly support SSLCommerz Easy Checkout POSTing to the static file
+  // Rewrite POST /payment-redirect.html -> /api/payment/redirect
+  if (
+    request.method === 'POST' &&
+    request.nextUrl.pathname === '/payment-redirect.html'
+  ) {
+    const url = request.nextUrl.clone();
+    url.pathname = '/api/payment/redirect';
+    return NextResponse.rewrite(url);
+  }
+
   // Handle SSLCommerz redirects (pages under /payment/*)
   if (request.nextUrl.pathname.startsWith('/payment/')) {
     const origin = request.headers.get('origin');
