@@ -54,6 +54,7 @@
         <div class="spinner"></div>
         <h2>Processing Payment...</h2>
         <p>Please wait while we redirect you to the appropriate page.</p>
+        <div id="debug" style="margin-top:12px; text-align:left; background:#F3F4F6; padding:10px; border-radius:8px; color:#111827; display:none;"></div>
     </div>
 
     <script>
@@ -62,17 +63,37 @@
         const tran_id = urlParams.get('tran_id');
         const status = urlParams.get('status');
         const val_id = urlParams.get('val_id');
-        
-        console.log('SSLCommerz redirect parameters:', { tran_id, status, val_id });
-        
-        // Redirect after a short delay
+
+        const debugEl = document.getElementById('debug');
+        const info = {
+          href: window.location.href,
+          search: window.location.search,
+          tran_id,
+          status,
+          val_id,
+          note: 'If params are empty, SSLCommerz likely posted to this static page (POST). We will fallback to generic success redirect.'
+        };
+        debugEl.style.display = 'block';
+        debugEl.innerText = 'Redirect Debug Info:\n' + JSON.stringify(info, null, 2);
+        console.log('SSLCommerz redirect parameters:', info);
+
+        // Redirect after a short delay with safe fallbacks
         setTimeout(() => {
-            if (status === 'VALID') {
-                window.location.href = `/payment/success?tran_id=${tran_id}&status=${status}&val_id=${val_id}`;
-            } else {
-                window.location.href = `/payment/fail?tran_id=${tran_id}&status=${status}`;
-            }
-        }, 1000);
+          if (status === 'VALID') {
+            window.location.replace(`/payment/success?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status)}&val_id=${encodeURIComponent(val_id || '')}`);
+            return;
+          }
+
+          if (status === 'FAILED' || status === 'CANCELLED' || status === 'CANCEL') {
+            window.location.replace(`/payment/fail?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status)}`);
+            return;
+          }
+
+          // Fallback: when no params are present (e.g., POST to static page)
+          // We route to success page without details to avoid framework issues.
+          window.location.replace('/payment/success');
+        }, 900);
     </script>
 </body>
 </html>
+
