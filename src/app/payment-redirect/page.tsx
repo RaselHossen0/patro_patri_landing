@@ -1,23 +1,22 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 // Force dynamic rendering to prevent prerendering issues
 export const dynamic = 'force-dynamic';
 
-function PaymentRedirectContent() {
-  const searchParams = useSearchParams();
+export default function PaymentRedirectPage() {
   const [isProcessing, setIsProcessing] = useState(true);
   const [debugInfo, setDebugInfo] = useState<any>(null);
 
   useEffect(() => {
-    // Extract parameters from URL
-    const tran_id = searchParams.get('tran_id');
-    const status = searchParams.get('status');
-    const val_id = searchParams.get('val_id');
-    const error = searchParams.get('error');
+    // Extract parameters from URL using URLSearchParams
+    const urlParams = new URLSearchParams(window.location.search);
+    const tran_id = urlParams.get('tran_id');
+    const status = urlParams.get('status');
+    const val_id = urlParams.get('val_id');
+    const error = urlParams.get('error');
 
     const info = {
       href: window.location.href,
@@ -45,7 +44,7 @@ function PaymentRedirectContent() {
         window.location.replace('/payment/success');
       }
     }, 1000);
-  }, [searchParams]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -117,20 +116,5 @@ function PaymentRedirectContent() {
         )}
       </div>
     </div>
-  );
-}
-
-export default function PaymentRedirectPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading payment details...</p>
-        </div>
-      </div>
-    }>
-      <PaymentRedirectContent />
-    </Suspense>
   );
 }
