@@ -28,6 +28,7 @@ const nextConfig: NextConfig = {
         has: [
           {
             type: 'method',
+            key: 'method',
             value: 'POST',
           },
         ],
