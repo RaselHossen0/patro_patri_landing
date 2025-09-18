@@ -25,13 +25,6 @@ const nextConfig: NextConfig = {
       {
         source: '/payment-redirect.html',
         destination: '/api/payment/redirect',
-        has: [
-          {
-            type: 'method',
-            key: 'method',
-            value: 'POST',
-          },
-        ],
       },
     ];
   },
