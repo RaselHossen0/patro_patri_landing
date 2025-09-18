@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const contentType = request.headers.get('content-type');
     const actionId = request.headers.get('next-action-id');
     
-    console.log('SSLCommerz POST redirect:', { 
+    console.log('Payment gateway POST redirect:', { 
       contentType, 
       actionId,
       headers: Object.fromEntries(request.headers.entries())
@@ -41,8 +41,8 @@ export async function POST(request: NextRequest) {
     
     // If it's a Server Action, return an error to prevent processing
     if (actionId || contentType?.includes('text/plain')) {
-      console.log('Blocking Server Action request from SSLCommerz');
-      return new NextResponse('Server Actions not allowed for SSLCommerz redirects', { 
+      console.log('Blocking Server Action request from payment gateway');
+      return new NextResponse('Server Actions not allowed for payment gateway redirects', { 
         status: 400,
         headers: {
           'Content-Type': 'text/plain',
@@ -52,30 +52,31 @@ export async function POST(request: NextRequest) {
     
     const formData = await request.formData();
     
-    // Extract SSLCommerz parameters from form data
+    // Extract payment gateway parameters from form data
     const tran_id = formData.get('tran_id') as string;
     const status = formData.get('status') as string;
     const val_id = formData.get('val_id') as string;
+    const error = formData.get('error') as string;
     
-    console.log('SSLCommerz POST form data:', { tran_id, status, val_id });
+    console.log('Payment gateway POST form data:', { tran_id, status, val_id, error });
     
     // Get the proper base URL - use the original host from headers
     const forwardedHost = request.headers.get('x-forwarded-host');
     const host = request.headers.get('host');
     const baseUrl = forwardedHost ? `https://${forwardedHost}` : (host ? `https://${host}` : 'https://patropatri.online');
     
-    // Redirect to appropriate page based on status
-    if (status === 'VALID') {
-      return NextResponse.redirect(
-        new URL(`/payment/success?tran_id=${tran_id}&status=${status}&val_id=${val_id}`, baseUrl)
-      );
-    } else {
-      return NextResponse.redirect(
-        new URL(`/payment/fail?tran_id=${tran_id}&status=${status}`, baseUrl)
-      );
-    }
+    // Redirect to the new payment-redirect page with parameters
+    const params = new URLSearchParams();
+    if (tran_id) params.set('tran_id', tran_id);
+    if (status) params.set('status', status);
+    if (val_id) params.set('val_id', val_id);
+    if (error) params.set('error', error);
+    
+    return NextResponse.redirect(
+      new URL(`/payment-redirect?${params.toString()}`, baseUrl)
+    );
   } catch (error) {
-    console.error('Error in SSLCommerz POST redirect:', error);
+    console.error('Error in payment gateway POST redirect:', error);
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
