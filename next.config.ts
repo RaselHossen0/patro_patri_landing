@@ -18,11 +18,20 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '2mb',
     },
   },
-  // Handle SSLCommerz redirects properly
+  // Handle payment gateway redirects properly
   async rewrites() {
     return [
-      // Ensure POSTs to the static HTML go to the API handler instead
-      { source: '/payment-redirect.html', destination: '/api/payment/redirect' },
+      // Only rewrite POST requests to the static HTML file to the API handler
+      {
+        source: '/payment-redirect.html',
+        destination: '/api/payment/redirect',
+        has: [
+          {
+            type: 'method',
+            value: 'POST',
+          },
+        ],
+      },
     ];
   },
   

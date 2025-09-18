@@ -18,10 +18,12 @@ export function middleware(request: NextRequest) {
     const origin = request.headers.get('origin');
     const forwardedHost = request.headers.get('x-forwarded-host');
     
-    // Allow SSLCommerz domains
+    // Allow payment gateway domains
     const allowedOrigins = [
       'sandbox.sslcommerz.com',
       'securepay.sslcommerz.com',
+      'sandbox.aamarpay.com',
+      'secure.aamarpay.com',
       'patropatri.online',
       'localhost:3000'
     ];
@@ -37,8 +39,8 @@ export function middleware(request: NextRequest) {
       return response;
     }
     
-    // For SSLCommerz redirects, always allow regardless of origin
-    if (origin && origin.includes('sslcommerz.com')) {
+    // For payment gateway redirects, always allow regardless of origin
+    if (origin && (origin.includes('sslcommerz.com') || origin.includes('aamarpay.com'))) {
       const response = NextResponse.next();
       response.headers.set('Access-Control-Allow-Origin', origin);
       response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
