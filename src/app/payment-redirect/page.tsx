@@ -4,6 +4,9 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
+// Force dynamic rendering to prevent prerendering issues
+export const dynamic = 'force-dynamic';
+
 function PaymentRedirectContent() {
   const searchParams = useSearchParams();
   const [isProcessing, setIsProcessing] = useState(true);

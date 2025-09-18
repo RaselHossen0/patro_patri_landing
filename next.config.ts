@@ -21,7 +21,11 @@ const nextConfig: NextConfig = {
   // Handle payment gateway redirects properly
   async rewrites() {
     return [
-      // No rewrites needed - using direct route for payment-redirect.html
+      // Rewrite POST requests to payment-redirect.html to the API handler
+      {
+        source: '/payment-redirect.html',
+        destination: '/api/payment/redirect',
+      },
     ];
   },
   
