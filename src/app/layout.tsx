@@ -50,6 +50,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={poppins.variable}>
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3348724239410590"
+          crossOrigin="anonymous"
+        />
+      </head>
       <GoogleAnalytics />
       <body className="font-sans antialiased">{children}</body>
     </html>
