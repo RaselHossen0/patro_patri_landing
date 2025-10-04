@@ -109,9 +109,6 @@ const HeroSection = () => {
               >
                 Download App
               </a>
-              <button className="bg-transparent border border-white text-white font-medium py-3 px-8 rounded-lg hover:bg-white/10 transition-all duration-300">
-                Learn More
-              </button>
             </div>
             
             <div className="mt-12">

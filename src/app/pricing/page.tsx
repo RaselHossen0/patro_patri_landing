@@ -154,7 +154,7 @@ const PricingPage = () => {
                           : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
                       }`}
                     >
-                      {plan.price === 0 ? 'Get Started Free' : 'Choose Plan'}
+                      Download App
                     </a>
                   </div>
                 </motion.div>
