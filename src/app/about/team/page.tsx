@@ -3,6 +3,7 @@ import Layout from '@/components/layout/Layout';
 import PageHeader from '@/components/ui/PageHeader';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { placeholderImages } from '@/utils/placeholderImages';
 
 interface TeamMemberProps {
   name: string;
@@ -91,7 +92,7 @@ export default function TeamPage() {
     {
       name: 'Md. Rasel Hossen',
       role: 'Founder & CEO',
-      image: '/images/team/ceo.jpg',
+      image: placeholderImages.ceo,
       bio: 'Rasel founded Patro Patri in 2023 with a vision to create a matrimony platform that truly understands and respects Bangladeshi culture. With over 10 years of experience in tech entrepreneurship, he leads the company with a focus on innovation and cultural sensitivity. Rasel holds an MBA from Dhaka University and is passionate about using technology to preserve and enhance cultural traditions.',
       socialLinks: {
         linkedin: 'https://linkedin.com',
@@ -103,7 +104,7 @@ export default function TeamPage() {
     {
       name: 'Fatima Rahman',
       role: 'Chief Technology Officer',
-      image: '/images/team/cto.jpg',
+      image: placeholderImages.cto,
       bio: 'Fatima leads the technology team at Patro Patri, overseeing all aspects of product development and technical infrastructure. She has over 8 years of experience in software development and previously worked at Google and Microsoft. Fatima holds a Master\'s degree in Computer Science from MIT and is passionate about creating intuitive, user-friendly applications that solve real-world problems.',
       socialLinks: {
         linkedin: 'https://linkedin.com',
@@ -115,7 +116,7 @@ export default function TeamPage() {
     {
       name: 'Ahmed Khan',
       role: 'Head of Marketing',
-      image: '/images/team/marketing.jpg',
+      image: placeholderImages.marketing,
       bio: 'Ahmed brings over 12 years of marketing experience to Patro Patri, with a special focus on digital marketing and brand development. He previously led marketing teams at several successful startups and established companies. Ahmed is responsible for building the Patro Patri brand and growing our user base through innovative marketing strategies that resonate with our target audience.',
       socialLinks: {
         linkedin: 'https://linkedin.com',
@@ -127,7 +128,7 @@ export default function TeamPage() {
     {
       name: 'Nusrat Jahan',
       role: 'Customer Success Manager',
-      image: '/images/team/customer.jpg',
+      image: placeholderImages.customer,
       bio: 'Nusrat leads our customer success team, ensuring that all Patro Patri users have a positive and fulfilling experience on our platform. With a background in psychology and customer service, she understands the importance of empathy and support in the matchmaking process. Nusrat and her team work tirelessly to provide guidance, resolve issues, and gather feedback to continuously improve our service.',
       socialLinks: {
         linkedin: 'https://linkedin.com',
@@ -139,7 +140,7 @@ export default function TeamPage() {
     {
       name: 'Kamal Hossain',
       role: 'Lead Developer',
-      image: '/images/team/developer.jpg',
+      image: placeholderImages.default,
       bio: 'Kamal is a senior developer with expertise in mobile application development. He leads the development of our Android and iOS applications, ensuring they are fast, reliable, and user-friendly. With a background in computer science and 6 years of experience in app development, Kamal is passionate about creating seamless user experiences that make finding a match easy and enjoyable.',
       socialLinks: {
         linkedin: 'https://linkedin.com',
@@ -150,7 +151,7 @@ export default function TeamPage() {
     {
       name: 'Tahmina Akter',
       role: 'UI/UX Designer',
-      image: '/images/team/designer.jpg',
+      image: placeholderImages.default,
       bio: 'Tahmina is responsible for the beautiful, intuitive design of the Patro Patri app and website. With a keen eye for aesthetics and user experience, she creates designs that are both visually appealing and functional. Tahmina holds a degree in Graphic Design and has 5 years of experience in UI/UX design for mobile and web applications.',
       socialLinks: {
         linkedin: 'https://linkedin.com',
