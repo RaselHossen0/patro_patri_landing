@@ -42,7 +42,6 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/" className="text-white hover:text-gold transition-colors duration-300">Home</Link>
             <Link href="/about" className="text-white hover:text-gold transition-colors duration-300">About</Link>
-            <Link href="/features" className="text-white hover:text-gold transition-colors duration-300">Features</Link>
             <Link href="/pricing" className="text-white hover:text-gold transition-colors duration-300">Pricing</Link>
             <Link href="/contact" className="text-white hover:text-gold transition-colors duration-300">Contact</Link>
             <Link href="/legal/privacy-policy" className="text-white hover:text-gold transition-colors duration-300">Privacy</Link>
@@ -50,7 +49,7 @@ const Header = () => {
           
           <div className="hidden md:flex items-center space-x-4">
             <Link 
-              href="https://play.google.com/store" 
+              href="https://play.google.com/store/apps/details?id=com.patropatri.matrimony" 
               target="_blank" 
               className="bg-burgundy text-white px-4 py-2 rounded-lg hover:bg-burgundy-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
             >
@@ -99,13 +98,6 @@ const Header = () => {
                 About
               </Link>
               <Link 
-                href="/features" 
-                className="text-white hover:text-gold transition-colors duration-300"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Features
-              </Link>
-              <Link 
                 href="/pricing" 
                 className="text-white hover:text-gold transition-colors duration-300"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -127,7 +119,7 @@ const Header = () => {
                 Privacy
               </Link>
               <Link 
-                href="https://play.google.com/store" 
+                href="https://play.google.com/store/apps/details?id=com.patropatri.matrimony" 
                 target="_blank" 
                 className="bg-burgundy text-white px-4 py-2 rounded-lg hover:bg-burgundy-dark transition-all duration-300 inline-block w-fit"
                 onClick={() => setIsMobileMenuOpen(false)}

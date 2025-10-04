@@ -11,7 +11,7 @@ export interface UserCountResponse {
 export const apiService = {
   async getRegisteredUsersCount(): Promise<UserCountResponse> {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/count`, {
+      const response = await fetch(`${API_BASE_URL}/public/users/count`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

@@ -20,10 +20,10 @@ const HeroSection = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   
-  // Set launch date to 30 days from now
+  // Set launch date to 12 days from now
   useEffect(() => {
     const launchDate = new Date();
-    launchDate.setDate(launchDate.getDate() + 30);
+    launchDate.setDate(launchDate.getDate() + 12);
     
     const timer = setInterval(() => {
       const now = new Date();
@@ -101,9 +101,14 @@ const HeroSection = () => {
             </div>
             
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center md:justify-start">
-              <button className="bg-burgundy text-white font-medium py-3 px-8 rounded-lg hover:bg-burgundy-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+              <a 
+                href="https://play.google.com/store/apps/details?id=com.patropatri.matrimony"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-burgundy text-white font-medium py-3 px-8 rounded-lg hover:bg-burgundy-dark transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-center"
+              >
                 Download App
-              </button>
+              </a>
               <button className="bg-transparent border border-white text-white font-medium py-3 px-8 rounded-lg hover:bg-white/10 transition-all duration-300">
                 Learn More
               </button>
