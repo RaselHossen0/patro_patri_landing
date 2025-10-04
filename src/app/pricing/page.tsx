@@ -26,10 +26,10 @@ const PricingPage = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await fetch('https://api.patropatri.online/api/admin/plans');
+        const response = await fetch('https://api.patropatri.online/api/public/plans');
         if (response.ok) {
           const data = await response.json();
-          setPlans(data.data.filter((plan: SubscriptionPlan) => plan.isActive));
+          setPlans(data.data);
         } else {
           throw new Error('Failed to fetch plans');
         }

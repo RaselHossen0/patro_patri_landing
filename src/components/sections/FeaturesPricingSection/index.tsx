@@ -58,10 +58,10 @@ const FeaturesPricingSection = ({ isVisible = false, title, subtitle, showPremiu
     const fetchPlans = async () => {
       try {
         setPlansLoading(true);
-        const response = await fetch('https://api.patropatri.online/api/admin/plans');
+        const response = await fetch('https://api.patropatri.online/api/public/plans');
         if (response.ok) {
           const data = await response.json();
-          setPlans(data.data.filter((plan: SubscriptionPlan) => plan.isActive).slice(0, 3));
+          setPlans(data.data.slice(0, 3));
         }
       } catch (error) {
         console.error('Failed to fetch plans:', error);
