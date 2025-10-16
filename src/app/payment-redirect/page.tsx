@@ -36,12 +36,18 @@ export default function PaymentRedirectPage() {
       setIsProcessing(false);
       
       if (status === 'VALID' || status === 'SUCCESS') {
-        window.location.replace(`/payment/success?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status)}&val_id=${encodeURIComponent(val_id || '')}`);
+        const successUrl = `/payment/success?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status)}&val_id=${encodeURIComponent(val_id || '')}`;
+        console.log('Redirecting to success page:', successUrl);
+        window.location.replace(successUrl);
       } else if (status === 'FAILED' || status === 'CANCELLED' || status === 'CANCEL' || error) {
-        window.location.replace(`/payment/fail?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status || 'FAILED')}&error=${encodeURIComponent(error || '')}`);
+        const failUrl = `/payment/fail?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status || 'FAILED')}&error=${encodeURIComponent(error || '')}`;
+        console.log('Redirecting to fail page:', failUrl);
+        window.location.replace(failUrl);
       } else {
-        // Fallback: redirect to success page
-        window.location.replace('/payment/success');
+        // Fallback: redirect to success page with available parameters
+        const fallbackUrl = `/payment/success?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status || 'SUCCESS')}&val_id=${encodeURIComponent(val_id || '')}`;
+        console.log('Fallback redirect to success page:', fallbackUrl);
+        window.location.replace(fallbackUrl);
       }
     }, 1000);
   }, []);

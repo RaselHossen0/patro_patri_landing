@@ -17,13 +17,13 @@ export async function GET(request: NextRequest) {
   
   // Redirect to appropriate page based on status
   if (status === 'VALID') {
-    return NextResponse.redirect(
-      new URL(`/payment/success?tran_id=${tran_id}&status=${status}&val_id=${val_id}`, baseUrl)
-    );
+    const successUrl = `/payment/success?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status)}&val_id=${encodeURIComponent(val_id || '')}`;
+    console.log('GET redirect to success:', successUrl);
+    return NextResponse.redirect(new URL(successUrl, baseUrl));
   } else {
-    return NextResponse.redirect(
-      new URL(`/payment/fail?tran_id=${tran_id}&status=${status}`, baseUrl)
-    );
+    const failUrl = `/payment/fail?tran_id=${encodeURIComponent(tran_id || '')}&status=${encodeURIComponent(status || 'FAILED')}`;
+    console.log('GET redirect to fail:', failUrl);
+    return NextResponse.redirect(new URL(failUrl, baseUrl));
   }
 }
 
@@ -72,9 +72,10 @@ export async function POST(request: NextRequest) {
     if (val_id) params.set('val_id', val_id);
     if (error) params.set('error', error);
     
-    return NextResponse.redirect(
-      new URL(`/payment-redirect?${params.toString()}`, baseUrl)
-    );
+    const redirectUrl = `/payment-redirect?${params.toString()}`;
+    console.log('POST redirect to payment-redirect:', redirectUrl);
+    
+    return NextResponse.redirect(new URL(redirectUrl, baseUrl));
   } catch (error) {
     console.error('Error in payment gateway POST redirect:', error);
     return new NextResponse('Internal Server Error', { status: 500 });

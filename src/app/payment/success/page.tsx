@@ -14,10 +14,19 @@ function PaymentSuccessContent() {
     const status = searchParams.get('status');
     const val_id = searchParams.get('val_id');
     
-    setPaymentDetails({
-      transactionId: tran_id,
+    // Debug logging
+    console.log('Payment Success Page - URL Parameters:', {
+      tran_id,
       status,
-      validationId: val_id,
+      val_id,
+      fullUrl: window.location.href,
+      searchParams: window.location.search
+    });
+    
+    setPaymentDetails({
+      transactionId: tran_id || 'N/A',
+      status: status || 'SUCCESS',
+      validationId: val_id || 'N/A',
     });
   }, [searchParams]);
 
@@ -46,13 +55,19 @@ function PaymentSuccessContent() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">Transaction ID:</span>
-                <span className="font-mono text-gray-900">{paymentDetails.transactionId}</span>
+                <span className="font-mono text-gray-900">
+                  {paymentDetails.transactionId === 'N/A' ? (
+                    <span className="text-gray-500 italic">Not available</span>
+                  ) : (
+                    paymentDetails.transactionId
+                  )}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Status:</span>
                 <span className="text-green-600 font-semibold capitalize">{paymentDetails.status}</span>
               </div>
-              {paymentDetails.validationId && (
+              {paymentDetails.validationId && paymentDetails.validationId !== 'N/A' && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">Validation ID:</span>
                   <span className="font-mono text-gray-900">{paymentDetails.validationId}</span>
