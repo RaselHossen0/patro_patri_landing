@@ -131,10 +131,19 @@ const FeaturesPricingSection = ({ isVisible = false, title, subtitle, showPremiu
   ];
 
   const formatDuration = (duration: number) => {
-    if (duration === 1) return '1 month';
-    if (duration < 12) return `${duration} months`;
-    const years = Math.floor(duration / 12);
-    const months = duration % 12;
+    // Duration is stored in days in the database
+    // Convert days to appropriate format
+    if (duration === 30) return 'month';
+    if (duration === 90) return '3 months';
+    if (duration === 365) return 'year';
+    if (duration < 30) return `${duration} days`;
+    if (duration < 365) {
+      const months = Math.floor(duration / 30);
+      return `${months} month${months > 1 ? 's' : ''}`;
+    }
+    const years = Math.floor(duration / 365);
+    const remainingDays = duration % 365;
+    const months = Math.floor(remainingDays / 30);
     if (months === 0) return `${years} year${years > 1 ? 's' : ''}`;
     return `${years} year${years > 1 ? 's' : ''} ${months} month${months > 1 ? 's' : ''}`;
   };
