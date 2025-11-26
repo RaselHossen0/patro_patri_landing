@@ -5,44 +5,12 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { apiService, UserCountResponse } from '@/services/api';
 
-interface CountdownProps {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
-
 const HeroSection = () => {
-  const [countdown, setCountdown] = useState<CountdownProps>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   const [userCount, setUserCount] = useState<UserCountResponse['data']>({
     totalUsers: 1000,
     message: 'Join 1,000+ registered users'
   });
   const [isLoading, setIsLoading] = useState(true);
-  
-  // Set launch date to 12 days from now
-  useEffect(() => {
-    const launchDate = new Date();
-    launchDate.setDate(launchDate.getDate() + 12);
-    
-    const timer = setInterval(() => {
-      const now = new Date();
-      const difference = launchDate.getTime() - now.getTime();
-      
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-      
-      setCountdown({ days, hours, minutes, seconds });
-      
-      if (difference < 0) {
-        clearInterval(timer);
-      }
-    }, 1000);
-    
-    return () => clearInterval(timer);
-  }, []);
 
   // Fetch user count on component mount
   useEffect(() => {
@@ -111,26 +79,26 @@ const HeroSection = () => {
               </a>
             </div>
             
+            {/* App Published Card */}
             <div className="mt-12">
-              <p className="text-gray-300 mb-4">Launching in:</p>
-              <div className="flex justify-center md:justify-start space-x-4">
-                <div className="bg-darkSlate/50 backdrop-blur-md rounded-lg p-4 w-20 text-center">
-                  <div className="text-3xl font-bold text-gold">{countdown.days}</div>
-                  <div className="text-xs text-gray-400">Days</div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="bg-gradient-to-r from-gold/20 to-burgundy/20 backdrop-blur-md border border-gold/30 rounded-xl p-6 shadow-lg"
+              >
+                <div className="flex items-center justify-center md:justify-start space-x-4">
+                  <div className="bg-gold/20 rounded-full p-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gold mb-1">App is Now Live!</h3>
+                    <p className="text-gray-300">Download Patro Patri from the Google Play Store</p>
+                  </div>
                 </div>
-                <div className="bg-darkSlate/50 backdrop-blur-md rounded-lg p-4 w-20 text-center">
-                  <div className="text-3xl font-bold text-gold">{countdown.hours}</div>
-                  <div className="text-xs text-gray-400">Hours</div>
-                </div>
-                <div className="bg-darkSlate/50 backdrop-blur-md rounded-lg p-4 w-20 text-center">
-                  <div className="text-3xl font-bold text-gold">{countdown.minutes}</div>
-                  <div className="text-xs text-gray-400">Minutes</div>
-                </div>
-                <div className="bg-darkSlate/50 backdrop-blur-md rounded-lg p-4 w-20 text-center">
-                  <div className="text-3xl font-bold text-gold">{countdown.seconds}</div>
-                  <div className="text-xs text-gray-400">Seconds</div>
-                </div>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
           
