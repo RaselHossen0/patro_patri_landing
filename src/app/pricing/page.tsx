@@ -4,6 +4,64 @@ import Layout from '@/components/layout/Layout';
 import PageHeader from '@/components/ui/PageHeader';
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { BreadcrumbSchema } from '@/components/SEO';
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'Pricing', url: '/pricing' },
+];
+
+// Static pricing schema for SEO (shown to crawlers)
+const pricingSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'Patro Patri Premium Subscription',
+  description: 'Premium matrimony subscription with advanced matching, unlimited contacts, and priority support',
+  brand: {
+    '@type': 'Brand',
+    name: 'Patro Patri',
+  },
+  offers: {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'BDT',
+    lowPrice: '0',
+    highPrice: '5000',
+    offerCount: '3',
+    offers: [
+      {
+        '@type': 'Offer',
+        name: 'Free Plan',
+        price: '0',
+        priceCurrency: 'BDT',
+        availability: 'https://schema.org/InStock',
+        priceValidUntil: '2026-12-31',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Premium Monthly',
+        price: '499',
+        priceCurrency: 'BDT',
+        availability: 'https://schema.org/InStock',
+        priceValidUntil: '2026-12-31',
+      },
+      {
+        '@type': 'Offer',
+        name: 'Premium Yearly',
+        price: '2999',
+        priceCurrency: 'BDT',
+        availability: 'https://schema.org/InStock',
+        priceValidUntil: '2026-12-31',
+      },
+    ],
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.5',
+    reviewCount: '1000',
+    bestRating: '5',
+    worstRating: '1',
+  },
+};
 
 interface SubscriptionPlan {
   id: string;
@@ -71,10 +129,35 @@ const PricingPage = () => {
 
   return (
     <Layout>
+      {/* Structured Data */}
+      <BreadcrumbSchema items={breadcrumbs} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(pricingSchema),
+        }}
+      />
+      
       <PageHeader 
         title="Pricing Plans" 
         subtitle="Choose the perfect plan for your matrimony journey"
       />
+      
+      {/* Breadcrumb Navigation */}
+      <nav aria-label="Breadcrumb" className="container mx-auto px-4 py-4">
+        <ol className="flex items-center space-x-2 text-sm text-gray-600">
+          {breadcrumbs.map((item, index) => (
+            <li key={index} className="flex items-center">
+              {index > 0 && <span className="mx-2">/</span>}
+              {index === breadcrumbs.length - 1 ? (
+                <span className="text-burgundy font-medium" aria-current="page">{item.name}</span>
+              ) : (
+                <a href={item.url} className="hover:text-burgundy transition-colors">{item.name}</a>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
 
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-4">

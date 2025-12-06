@@ -2,45 +2,63 @@
 import Layout from '@/components/layout/Layout';
 import PageHeader from '@/components/ui/PageHeader';
 import { motion } from 'framer-motion';
+import { FAQSchema, BreadcrumbSchema } from '@/components/SEO';
+
+const faqs = [
+  {
+    question: "How does Patro Patri work?",
+    answer: "Patro Patri is a Bangladeshi matrimony platform that helps you find compatible matches based on your preferences, values, and cultural background. You can create a profile, set your preferences, and our smart matching algorithm will suggest potential matches."
+  },
+  {
+    question: "Is Patro Patri free to use?",
+    answer: "Yes, Patro Patri offers a free plan with basic features. We also have premium plans that offer additional features like unlimited matches, priority matching, advanced filters, and more."
+  },
+  {
+    question: "How do I create an account?",
+    answer: "You can create an account by downloading our mobile app from Google Play Store or visiting our website. Simply provide your basic information, verify your email, and complete your profile."
+  },
+  {
+    question: "Is my personal information safe?",
+    answer: "Yes, we take your privacy seriously. We use industry-standard encryption and security measures to protect your personal information. You can control who sees your profile and what information is visible."
+  },
+  {
+    question: "Can family members be involved in the process?",
+    answer: "Yes, Patro Patri has unique features that allow family members to participate in the matchmaking process while respecting individual choices. You can invite family members to view profiles and provide feedback."
+  },
+  {
+    question: "How do I contact potential matches?",
+    answer: "Once you find someone you're interested in, you can send them a message through our secure messaging system. Premium users get additional communication features like phone number access."
+  },
+  {
+    question: "What payment methods do you accept?",
+    answer: "We accept all major credit cards, mobile banking, and bKash for Bangladeshi users. All payments are processed securely through our payment partners."
+  },
+  {
+    question: "Can I delete my account?",
+    answer: "Yes, you can delete your account at any time. Go to your account settings and select 'Delete Account'. Please note that this action is irreversible and all your data will be permanently removed."
+  },
+  {
+    question: "How do I verify my profile?",
+    answer: "Profile verification is done through our secure verification process. You can verify your phone number, email, and identity documents. Verified profiles get a badge and higher visibility in search results."
+  },
+  {
+    question: "What makes Patro Patri different from other matrimony apps?",
+    answer: "Patro Patri is specifically designed for Bangladeshi culture and traditions. We offer Bengali language support, local payment methods like bKash, cultural compatibility matching, and family involvement features that respect our values."
+  }
+];
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: 'FAQ', url: '/faq' },
+];
 
 const FAQPage = () => {
-  const faqs = [
-    {
-      question: "How does Patro Patri work?",
-      answer: "Patro Patri is a Bangladeshi matrimony platform that helps you find compatible matches based on your preferences, values, and cultural background. You can create a profile, set your preferences, and our smart matching algorithm will suggest potential matches."
-    },
-    {
-      question: "Is Patro Patri free to use?",
-      answer: "Yes, Patro Patri offers a free plan with basic features. We also have premium plans that offer additional features like unlimited matches, priority matching, advanced filters, and more."
-    },
-    {
-      question: "How do I create an account?",
-      answer: "You can create an account by downloading our mobile app from Google Play Store or visiting our website. Simply provide your basic information, verify your email, and complete your profile."
-    },
-    {
-      question: "Is my personal information safe?",
-      answer: "Yes, we take your privacy seriously. We use industry-standard encryption and security measures to protect your personal information. You can control who sees your profile and what information is visible."
-    },
-    {
-      question: "Can family members be involved in the process?",
-      answer: "Yes, Patro Patri has unique features that allow family members to participate in the matchmaking process while respecting individual choices. You can invite family members to view profiles and provide feedback."
-    },
-    {
-      question: "How do I contact potential matches?",
-      answer: "Once you find someone you're interested in, you can send them a message through our secure messaging system. Premium users get additional communication features like phone number access."
-    },
-    {
-      question: "What payment methods do you accept?",
-      answer: "We accept all major credit cards, mobile banking, and bKash for Bangladeshi users. All payments are processed securely through our payment partners."
-    },
-    {
-      question: "Can I delete my account?",
-      answer: "Yes, you can delete your account at any time. Go to your account settings and select 'Delete Account'. Please note that this action is irreversible and all your data will be permanently removed."
-    }
-  ];
-
   return (
     <Layout>
+      {/* Structured Data */}
+      <FAQSchema faqs={faqs} />
+      <BreadcrumbSchema items={breadcrumbs} />
+      
       <PageHeader 
         title="Frequently Asked Questions" 
         subtitle="Find answers to common questions about Patro Patri"
@@ -49,6 +67,22 @@ const FAQPage = () => {
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
+            {/* Breadcrumb Navigation */}
+            <nav aria-label="Breadcrumb" className="mb-8">
+              <ol className="flex items-center space-x-2 text-sm text-gray-600">
+                {breadcrumbs.map((item, index) => (
+                  <li key={index} className="flex items-center">
+                    {index > 0 && <span className="mx-2">/</span>}
+                    {index === breadcrumbs.length - 1 ? (
+                      <span className="text-burgundy font-medium" aria-current="page">{item.name}</span>
+                    ) : (
+                      <a href={item.url} className="hover:text-burgundy transition-colors">{item.name}</a>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </nav>
+
             <div className="space-y-6">
               {faqs.map((faq, index) => (
                 <motion.div
@@ -58,9 +92,18 @@ const FAQPage = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="bg-white rounded-xl shadow-md p-6"
+                  itemScope
+                  itemType="https://schema.org/Question"
                 >
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">{faq.question}</h3>
-                  <p className="text-gray-700">{faq.answer}</p>
+                  <h3 
+                    className="text-lg font-semibold text-gray-900 mb-3"
+                    itemProp="name"
+                  >
+                    {faq.question}
+                  </h3>
+                  <div itemScope itemType="https://schema.org/Answer" itemProp="acceptedAnswer">
+                    <p className="text-gray-700" itemProp="text">{faq.answer}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>
