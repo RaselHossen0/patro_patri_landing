@@ -18,6 +18,31 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '2mb',
     },
   },
+  
+  // Redirects for canonical URL (www -> non-www, remove trailing slash)
+  async redirects() {
+    return [
+      // Redirect www to non-www (permanent 301 redirect)
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.patropatri.online',
+          },
+        ],
+        destination: 'https://patropatri.online/:path*',
+        permanent: true,
+      },
+      // Redirect careers page to home (since it's removed)
+      {
+        source: '/careers',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
+  
   // Handle payment gateway redirects properly
   async rewrites() {
     return [

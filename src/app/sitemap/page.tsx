@@ -28,8 +28,7 @@ const SitemapPage = () => {
       category: "Support",
       pages: [
         { name: "FAQ", url: "/faq" },
-        { name: "Support", url: "/support" },
-        { name: "Careers", url: "/careers" }
+        { name: "Support", url: "/support" }
       ]
     },
     {
