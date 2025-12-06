@@ -43,8 +43,11 @@ const FeaturesPricingSection = ({ isVisible = false, title, subtitle, showPremiu
         if (response.success) {
           setUserCount(response.data);
         }
-      } catch (error) {
-        console.error('Failed to fetch user count:', error);
+      } catch (error: any) {
+        // Only log in development, suppress CORS errors in production
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Failed to fetch user count:', error);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -58,13 +61,25 @@ const FeaturesPricingSection = ({ isVisible = false, title, subtitle, showPremiu
     const fetchPlans = async () => {
       try {
         setPlansLoading(true);
-        const response = await fetch('https://api.patropatri.online/api/public/plans');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch('https://api.patropatri.online/api/public/plans', {
+          signal: controller.signal,
+        });
+        
+        clearTimeout(timeoutId);
+        
         if (response.ok) {
           const data = await response.json();
           setPlans(data.data.slice(0, 3));
         }
-      } catch (error) {
-        console.error('Failed to fetch plans:', error);
+      } catch (error: any) {
+        // Only log in development, suppress CORS and network errors in production
+        if (process.env.NODE_ENV !== 'production' && !error.name?.includes('AbortError')) {
+          console.error('Failed to fetch plans:', error);
+        }
+        // Silently fail - component will show default state
       } finally {
         setPlansLoading(false);
       }

@@ -29,8 +29,11 @@ const FeaturesSection = ({ isVisible = false, title, subtitle, features: customF
         if (response.success) {
           setUserCount(response.data);
         }
-      } catch (error) {
-        console.error('Failed to fetch user count:', error);
+      } catch (error: any) {
+        // Only log in development, suppress CORS errors in production
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Failed to fetch user count:', error);
+        }
       } finally {
         setIsLoading(false);
       }

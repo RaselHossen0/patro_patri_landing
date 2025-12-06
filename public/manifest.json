@@ -13,68 +13,9 @@
   "categories": ["lifestyle", "social", "dating"],
   "icons": [
     {
-      "src": "/icons/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icons/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/images/screenshot-mobile.jpg",
-      "sizes": "750x1334",
-      "type": "image/jpeg",
-      "form_factor": "narrow",
-      "label": "Patro Patri Mobile App"
-    },
-    {
-      "src": "/images/screenshot-desktop.jpg",
-      "sizes": "1920x1080",
-      "type": "image/jpeg",
-      "form_factor": "wide",
-      "label": "Patro Patri Desktop"
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
     }
   ],
   "related_applications": [
@@ -90,15 +31,13 @@
       "name": "Find Matches",
       "short_name": "Matches",
       "description": "Browse potential matches",
-      "url": "/features",
-      "icons": [{ "src": "/icons/match-icon.png", "sizes": "96x96" }]
+      "url": "/features"
     },
     {
       "name": "Pricing",
       "short_name": "Pricing",
       "description": "View pricing plans",
-      "url": "/pricing",
-      "icons": [{ "src": "/icons/pricing-icon.png", "sizes": "96x96" }]
+      "url": "/pricing"
     }
   ]
 }

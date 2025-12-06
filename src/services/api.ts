@@ -8,6 +8,9 @@ export interface UserCountResponse {
   };
 }
 
+// Helper to check if we're in production
+const isProduction = process.env.NODE_ENV === 'production';
+
 export const apiService = {
   async getRegisteredUsersCount(): Promise<UserCountResponse> {
     try {
@@ -16,6 +19,8 @@ export const apiService = {
         headers: {
           'Content-Type': 'application/json',
         },
+        // Add timeout to prevent hanging requests
+        signal: AbortSignal.timeout(5000),
       });
 
       if (!response.ok) {
@@ -25,7 +30,10 @@ export const apiService = {
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error('Error fetching user count:', error);
+      // Only log errors in development
+      if (!isProduction) {
+        console.error('Error fetching user count:', error);
+      }
       // Return fallback data if API fails
       return {
         success: false,

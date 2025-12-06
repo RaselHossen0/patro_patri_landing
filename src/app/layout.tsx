@@ -93,17 +93,10 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: `${siteConfig.url}/images/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: `${siteConfig.name} - Find Your Perfect Life Partner`,
-        type: 'image/jpeg',
-      },
-      {
-        url: '/images/og-image-square.jpg',
-        width: 600,
-        height: 600,
-        alt: `${siteConfig.name} Logo`,
         type: 'image/jpeg',
       },
     ],
@@ -143,13 +136,9 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
     ],
     apple: [
       { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    other: [
-      { rel: 'mask-icon', url: '/safari-pinned-tab.svg', color: '#8B2332' },
     ],
   },
   manifest: '/manifest.json',
@@ -175,12 +164,6 @@ const organizationSchema = {
   '@id': `${siteConfig.url}/#organization`,
   name: siteConfig.name,
   url: siteConfig.url,
-  logo: {
-    '@type': 'ImageObject',
-    url: `${siteConfig.url}/images/logo.png`,
-    width: 512,
-    height: 512,
-  },
   description: siteConfig.description,
   email: siteConfig.email,
   telephone: siteConfig.phone,
@@ -245,7 +228,6 @@ const mobileAppSchema = {
   },
   downloadUrl: siteConfig.appStoreUrl,
   installUrl: siteConfig.appStoreUrl,
-  screenshot: `${siteConfig.url}/images/app-screenshot.jpg`,
   author: {
     '@id': `${siteConfig.url}/#organization`,
   },
@@ -281,9 +263,6 @@ export default function RootLayout({
         {/* DNS Prefetch for additional performance */}
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://api.patropatri.online" />
-        
-        {/* Preload critical assets */}
-        <link rel="preload" href="/images/og-image.jpg" as="image" type="image/jpeg" />
         
         {/* Google AdSense */}
         <script

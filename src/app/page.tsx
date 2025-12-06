@@ -55,7 +55,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Patro Patri - Bangladesh's #1 Trusted Matrimony Platform",
     description: 'Find your perfect life partner with AI-powered matching designed for Bangladeshi culture.',
-    images: ['/images/twitter-image.jpg'],
   },
 };
 
@@ -74,10 +73,6 @@ const homePageSchema = {
     '@type': 'Thing',
     name: 'Matrimony Services',
     description: 'Online matrimony and matchmaking services for Bangladeshi singles',
-  },
-  primaryImageOfPage: {
-    '@type': 'ImageObject',
-    url: 'https://patropatri.online/images/og-image.jpg',
   },
   breadcrumb: {
     '@type': 'BreadcrumbList',

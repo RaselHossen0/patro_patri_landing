@@ -84,16 +84,30 @@ const PricingPage = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const response = await fetch('https://api.patropatri.online/api/public/plans');
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        
+        const response = await fetch('https://api.patropatri.online/api/public/plans', {
+          signal: controller.signal,
+        });
+        
+        clearTimeout(timeoutId);
+        
         if (response.ok) {
           const data = await response.json();
           setPlans(data.data);
         } else {
           throw new Error('Failed to fetch plans');
         }
-      } catch (err) {
-        setError('Failed to load pricing plans');
-        console.error('Error fetching plans:', err);
+      } catch (err: any) {
+        // Only show error message if it's not a CORS/network error
+        if (err.name !== 'AbortError' && !err.message?.includes('Failed to fetch')) {
+          setError('Failed to load pricing plans');
+        }
+        // Only log in development
+        if (process.env.NODE_ENV !== 'production') {
+          console.error('Error fetching plans:', err);
+        }
       } finally {
         setLoading(false);
       }
